@@ -143,17 +143,7 @@ export class MockSubscriptionLink extends ApolloLink {
 }
 
 function requestToKey(request: GraphQLRequest, addTypename: Boolean): string {
-  // We'll first make sure no @client only fields are included in the
-  // incoming query. If we can't check for @client only fields (ie.
-  // the incoming query doesn't have an `OperationDefinition`), we'll
-  // fallback on using the original query as is.
-  let query;
-  try {
-    query = removeClientSetsFromDocument(request.query);
-  } catch (error) {
-    query = request.query;
-  }
-
+  const query = removeClientSetsFromDocument(request.query);
   const queryString =
     query && print(addTypename ? addTypenameToDocument(query) : query);
   const requestKey = { query: queryString };
