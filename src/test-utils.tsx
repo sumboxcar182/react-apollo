@@ -1,6 +1,5 @@
 import * as React from 'react';
-import ApolloClient from 'apollo-client';
-import { DefaultOptions } from 'apollo-client/ApolloClient';
+import ApolloClient, { DefaultOptions } from 'apollo-client';
 import { InMemoryCache as Cache } from 'apollo-cache-inmemory';
 
 import { ApolloProvider } from './index';

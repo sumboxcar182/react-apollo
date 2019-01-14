@@ -433,7 +433,7 @@ describe('[queries] lifecycle', () => {
     wrapper = mount(app);
   });
 
-  it('will re-execute a query when the client changes', async () => {
+  it.only('will re-execute a query when the client changes', async () => {
     const query: DocumentNode = gql`
       {
         a
@@ -442,10 +442,6 @@ describe('[queries] lifecycle', () => {
       }
     `;
     const link1 = mockSingleLink(
-      {
-        request: { query },
-        result: { data: { a: 1, b: 2, c: 3 } },
-      },
       {
         request: { query },
         result: { data: { a: 1, b: 2, c: 3 } },
@@ -464,20 +460,8 @@ describe('[queries] lifecycle', () => {
         request: { query },
         result: { data: { a: 4, b: 5, c: 6 } },
       },
-      {
-        request: { query },
-        result: { data: { a: 4, b: 5, c: 6 } },
-      },
     );
     const link3 = mockSingleLink(
-      {
-        request: { query },
-        result: { data: { a: 7, b: 8, c: 9 } },
-      },
-      {
-        request: { query },
-        result: { data: { a: 7, b: 8, c: 9 } },
-      },
       {
         request: { query },
         result: { data: { a: 7, b: 8, c: 9 } },
@@ -543,15 +527,26 @@ describe('[queries] lifecycle', () => {
 
     renderer.create(<ClientSwitcher />);
 
+    // Load 1
     await wait(1);
+
+    // Load 2
     refetchQuery!();
     await wait(1);
+
+    // Load 3
     switchClient!(client2);
     await wait(1);
+
+    // Load 4
     refetchQuery!();
     await wait(1);
+
+    // Load 5
     switchClient!(client3);
     await wait(1);
+
+    // Load 6
     switchClient!(client1);
     await wait(1);
     switchClient!(client2);
@@ -560,18 +555,35 @@ describe('[queries] lifecycle', () => {
     await wait(1);
 
     expect(renders).toEqual([
-      { loading: true },
+      // Load 1
+      { loading: true, a: undefined, b: undefined, c: undefined },
       { loading: false, a: 1, b: 2, c: 3 },
+
+      // Load 2
       { loading: true, a: 1, b: 2, c: 3 },
       { loading: false, a: 1, b: 2, c: 3 },
-      { loading: true },
+
+      // Load 3
+      { loading: true, a: undefined, b: undefined, c: undefined },
       { loading: false, a: 4, b: 5, c: 6 },
+
+      // Load 4
       { loading: true, a: 4, b: 5, c: 6 },
       { loading: false, a: 4, b: 5, c: 6 },
-      { loading: true },
+
+      // Load 5
+      { loading: true, a: undefined, b: undefined, c: undefined },
       { loading: false, a: 7, b: 8, c: 9 },
+
+      // Load 6
+      { loading: false, a: 1, b: 2, c: 3 },
+      { loading: false, a: 1, b: 2, c: 3 },
       { loading: false, a: 1, b: 2, c: 3 },
       { loading: false, a: 4, b: 5, c: 6 },
+      { loading: false, a: 4, b: 5, c: 6 },
+      { loading: false, a: 4, b: 5, c: 6 },
+      { loading: false, a: 7, b: 8, c: 9 },
+      { loading: false, a: 7, b: 8, c: 9 },
       { loading: false, a: 7, b: 8, c: 9 },
     ]);
   });

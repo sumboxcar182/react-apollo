@@ -577,6 +577,7 @@ describe('[queries] skip', () => {
       skip: boolean;
       setSkip: (skip: boolean) => void;
     }
+    let count = 0;
     const Container = graphql<Props>(query, {
       options: () => ({ fetchPolicy: 'network-only' }),
       skip: ({ skip }) => skip,
@@ -590,8 +591,11 @@ describe('[queries] skip', () => {
             this.props.setSkip(false);
           } else if (hasRequeried) {
             // Step 4. We need to actually get the data from the query into the component!
-            expect(newProps.data!.loading).toBeFalsy();
-            done();
+            if (count === 1) {
+              expect(newProps.data!.loading).toBeFalsy();
+              done();
+            }
+            count += 1;
           } else if (hasSkipped) {
             // Step 3. We need to query again!
             expect(newProps.data!.loading).toBeTruthy();
