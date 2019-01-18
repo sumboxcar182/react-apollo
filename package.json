@@ -1,6 +1,6 @@
 {
   "name": "react-apollo",
-  "version": "2.4.0-alpha.3",
+  "version": "2.4.0-alpha.4",
   "author": "opensource@apollographql.com",
   "private": true,
   "browser": "lib/react-apollo.browser.umd.js",
@@ -112,7 +112,6 @@
     "apollo-cache-inmemory": "alpha",
     "apollo-client": "alpha",
     "apollo-link": "1.2.6",
-    "apollo-utilities": "alpha",
     "babel-core": "6.26.3",
     "babel-jest": "23.6.0",
     "babel-preset-env": "1.7.0",
@@ -154,6 +153,7 @@
     "invariant": "^2.2.2",
     "lodash.flowright": "^3.5.0",
     "lodash.isequal": "^4.5.0",
-    "prop-types": "^15.6.0"
+    "prop-types": "^15.6.0",
+    "apollo-utilities": "alpha"
   }
 }
